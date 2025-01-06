@@ -1,0 +1,14 @@
+keys:
+  - &admin_nikolai age1hph9r83xj7cjh8ydpvl9nstyk35cfe7703jf7z0waj9nzgjz3s3qa39n02
+  - &server_172607 age1hna5dnsf2xcafg2cu7tlfdzstl6fmuy7efg6lh9ne50k0rn3gdvqfkxx79
+creation_rules:
+  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+          - *admin_nikolai
+          - *server_172607
+  - path_regex: secrets/172607/[^/]+\.(yaml|json|env|ini)$
+    key_groups:
+      - age:
+          - *admin_nikolai
+          - *server_172607
