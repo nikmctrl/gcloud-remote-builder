@@ -51,7 +51,7 @@
 
   boot.tmp.cleanOnBoot = true;
   zramSwap.enable = true;
-  networking.domain = "europe-west2-a.c.nix-ci-446719.internal";# FIXME: Add the rest of your current configuration
+  networking.domain = "europe-west2-a.c.nix-ci-446719.internal"; # FIXME: Add the rest of your current configuration
   networking.hostName = "instance-20250106-172607";
 
   users.users = {

@@ -26,29 +26,27 @@
     ...
   } @ inputs: let
     inherit (self) outputs;
-  in {
-    # Available through 'nixos-rebuild --flake .#instance-20250106-172607'
-    nixosConfigurations = {
-      instance-20250106-172607 = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-        homeManager.extraSpecialArgs = {inherit inputs outputs;};
-        modules = [
-          ./nixos/configuration.nix
+  in
+    flake-utils.lib.eachDefaultSystem (system: {
+      devShell = import ./shell.nix;
 
-          home-manager.nixosModules.home-manager
-          ./home-manager/home.nix
+      formatter = nixpkgs.legacyPackages.${system}.alejandra;
+    })
+    // {
+      # Available through 'nixos-rebuild --flake .#instance-20250106-172607'
+      nixosConfigurations = {
+        instance-20250106-172607 = nixpkgs.lib.nixosSystem {
+          specialArgs = {inherit inputs outputs;};
+          homeManager.extraSpecialArgs = {inherit inputs outputs;};
+          modules = [
+            ./nixos/configuration.nix
 
-          sops-nix.nixosModules.sops
+            home-manager.nixosModules.home-manager
+            ./home-manager/home.nix
+
+            sops-nix.nixosModules.sops
           ];
+        };
       };
     };
-
-    devShells = flake-utils.lib.eachDefaultSystem (system: {
-      default = import ./shell.nix { inherit inputs outputs system; };
-    });
-
-    
-
-    
-  };
 }
