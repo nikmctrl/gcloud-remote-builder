@@ -5,6 +5,7 @@
   lib,
   config,
   pkgs,
+  sops,
   ...
 }: {
   imports = [
@@ -49,9 +50,11 @@
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 
+
+
   boot.tmp.cleanOnBoot = true;
   zramSwap.enable = true;
-  networking.domain = "europe-west2-a.c.nix-ci-446719.internal"; # FIXME: Add the rest of your current configuration
+  networking.domain = "europe-west2-a.c.nix-ci-446719.internal"; 
   networking.hostName = "instance-20250106-172607";
 
   users.users = {
@@ -59,8 +62,7 @@
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7zhSffzoHpHVr8/TDJnhzvzDAWkS8GZO9udQaJ+ftl vii@nikbook"
     ];
     nikolai = {
-      # TODO: Set your password
-      initialPassword = "";
+      hashedPasswordFile = sops.secrets."linux/password";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7zhSffzoHpHVr8/TDJnhzvzDAWkS8GZO9udQaJ+ftl vii@nikbook"

@@ -27,10 +27,11 @@
   } @ inputs: let
     inherit (self) outputs;
   in
-    flake-utils.lib.eachDefaultSystem (system: {
-      devShell = import ./shell.nix;
+    flake-utils.lib.eachDefaultSystem (system: let pkgs = nixpkgs.legacyPackages.${system};
+      in {
+        devShell = import ./shell.nix { inherit pkgs; };
 
-      formatter = nixpkgs.legacyPackages.${system}.alejandra;
+      formatter = pkgs.alejandra;
     })
     // {
       # Available through 'nixos-rebuild --flake .#instance-20250106-172607'
