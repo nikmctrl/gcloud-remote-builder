@@ -3,6 +3,7 @@
   lib,
   config,
   pkgs,
+  home-manager,
   ...
 }: {
   imports = [
@@ -32,7 +33,6 @@
     };
   };
 
-  # TODO: Set your username
   home = {
     username = "nikolai";
     homeDirectory = "/home/nikolai";

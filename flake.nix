@@ -38,12 +38,9 @@
       nixosConfigurations = {
         instance-20250106-172607 = nixpkgs.lib.nixosSystem {
           specialArgs = {inherit inputs outputs;};
-          homeManager.extraSpecialArgs = {inherit inputs outputs;};
+          # homeManager.extraSpecialArgs = {inherit inputs outputs;};
           modules = [
             ./nixos/configuration.nix
-
-            home-manager.nixosModules.home-manager
-            ./home-manager/home.nix
 
             sops-nix.nixosModules.sops
           ];
