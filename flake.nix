@@ -53,22 +53,18 @@
 
       deploy.nodes = {
         instance-20250106-172607 = {
-          hostname = "instance-20250106-172607";
+          hostname = "34.142.105.10";
           profiles = {
             system = {
-            user = "root";
+              sshUser = "root";
+              user = "root";
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.instance-20250106-172607;
             };
-            home = {
-              user = "nikolai";
-              path = deploy-rs.lib.x86_64-linux.activate.home-manager self.homeManagerConfigurations.nikolai;
-            };
           };
+          remoteBuild = true;
         };
 
         checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
-
-
       };
     };
 }
