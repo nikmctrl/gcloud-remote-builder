@@ -7,7 +7,6 @@
   pkgs,
   ...
 }: {
-  # You can import other NixOS modules here
   imports = [
     # If you want to use modules from other flakes (such as nixos-hardware):
     # inputs.hardware.nixosModules.common-cpu-amd
@@ -16,12 +15,10 @@
     # You can also split up your configuration and import pieces of it here:
     # ./users.nix
 
-    # Import your generated (nixos-generate-config) hardware configuration
     ./hardware-configuration.nix
   ];
 
   nixpkgs = {
-    # You can add overlays here
     overlays = [
       # If you want to use overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
@@ -33,9 +30,7 @@
       #   });
       # })
     ];
-    # Configure your nixpkgs instance
     config = {
-      # Disable if you don't want unfree packages
       allowUnfree = true;
     };
   };
@@ -44,52 +39,40 @@
     flakeInputs = lib.filterAttrs (_: lib.isType "flake") inputs;
   in {
     settings = {
-      # Enable flakes and new 'nix' command
       experimental-features = "nix-command flakes";
-      # Opinionated: disable global registry
       flake-registry = "";
-      # Workaround for https://github.com/NixOS/nix/issues/9574
       nix-path = config.nix.nixPath;
     };
-    # Opinionated: disable channels
     channel.enable = false;
 
-    # Opinionated: make flake registry and nix path match flake inputs
     registry = lib.mapAttrs (_: flake: {inherit flake;}) flakeInputs;
     nixPath = lib.mapAttrsToList (n: _: "${n}=flake:${n}") flakeInputs;
   };
 
-  # FIXME: Add the rest of your current configuration
+  boot.tmp.cleanOnBoot = true;
+  zramSwap.enable = true;
+  networking.domain = "europe-west2-a.c.nix-ci-446719.internal";# FIXME: Add the rest of your current configuration
+  networking.hostName = "instance-20250106-172607";
 
-  # TODO: Set your hostname
-  networking.hostName = "your-hostname";
-
-  # TODO: Configure your system-wide user settings (groups, etc), add more users as needed.
   users.users = {
-    # FIXME: Replace with your username
-    your-username = {
-      # TODO: You can set an initial password for your user.
-      # If you do, you can skip setting a root password by passing '--no-root-passwd' to nixos-install.
-      # Be sure to change it (using passwd) after rebooting!
-      initialPassword = "correcthorsebatterystaple";
+    root.openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7zhSffzoHpHVr8/TDJnhzvzDAWkS8GZO9udQaJ+ftl vii@nikbook"
+    ];
+    nikolai = {
+      # TODO: Set your password
+      initialPassword = "";
       isNormalUser = true;
       openssh.authorizedKeys.keys = [
-        # TODO: Add your SSH public key(s) here, if you plan on using SSH to connect
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7zhSffzoHpHVr8/TDJnhzvzDAWkS8GZO9udQaJ+ftl vii@nikbook"
       ];
-      # TODO: Be sure to add any other groups you need (such as networkmanager, audio, docker, etc)
       extraGroups = ["wheel"];
     };
   };
 
-  # This setups a SSH server. Very important if you're setting up a headless system.
-  # Feel free to remove if you don't need it.
   services.openssh = {
     enable = true;
     settings = {
-      # Opinionated: forbid root login through SSH.
-      PermitRootLogin = "no";
-      # Opinionated: use keys only.
-      # Remove if you want to SSH using passwords
+      PermitRootLogin = "yes";
       PasswordAuthentication = false;
     };
   };

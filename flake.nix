@@ -3,10 +3,10 @@
 
   inputs = {
     # Nixpkgs
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Home manager
-    home-manager.url = "github:nix-community/home-manager/release-23.11";
+    home-manager.url = "github:nix-community/home-manager";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
@@ -18,27 +18,19 @@
   } @ inputs: let
     inherit (self) outputs;
   in {
-    # NixOS configuration entrypoint
-    # Available through 'nixos-rebuild --flake .#your-hostname'
+    # Available through 'nixos-rebuild --flake .#instance-20250106-172607'
     nixosConfigurations = {
-      # FIXME replace with your hostname
-      your-hostname = nixpkgs.lib.nixosSystem {
+      instance-20250106-172607 = nixpkgs.lib.nixosSystem {
         specialArgs = {inherit inputs outputs;};
-        # > Our main nixos configuration file <
-        modules = [./nixos/configuration.nix];
+        homeManager.extraSpecialArgs = {inherit inputs outputs;};
+        modules = [
+          ./nixos/configuration.nix
+          home-manager.nixosModules.home-manager
+          ./home-manager/home.nix
+          ];
       };
     };
 
-    # Standalone home-manager configuration entrypoint
-    # Available through 'home-manager --flake .#your-username@your-hostname'
-    homeConfigurations = {
-      # FIXME replace with your username@hostname
-      "your-username@your-hostname" = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
-        extraSpecialArgs = {inherit inputs outputs;};
-        # > Our main home-manager configuration file <
-        modules = [./home-manager/home.nix];
-      };
-    };
+    
   };
 }

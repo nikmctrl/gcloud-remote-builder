@@ -1,12 +1,14 @@
-# This is just an example, you should generate yours with nixos-generate-config and put it in here.
+{ modulesPath, ... }:
 {
-  boot.loader.systemd-boot.enable = true;
-
-  fileSystems."/" = {
-    device = "/dev/sda1";
-    fsType = "ext4";
+  imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
+  boot.loader.grub = {
+    efiSupport = true;
+    efiInstallAsRemovable = true;
+    device = "nodev";
   };
-
-  # Set your system kind (needed for flakes)
-  nixpkgs.hostPlatform = "x86_64-linux";
+  fileSystems."/boot" = { device = "/dev/disk/by-uuid/75D4-DAB1"; fsType = "vfat"; };
+  boot.initrd.availableKernelModules = [ "ata_piix" "uhci_hcd" "xen_blkfront" "vmw_pvscsi" ];
+  boot.initrd.kernelModules = [ "nvme" ];
+  fileSystems."/" = { device = "/dev/sda1"; fsType = "ext4"; };
+  
 }
