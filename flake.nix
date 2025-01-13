@@ -93,7 +93,7 @@
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.icedancer;
             };
           };
-          remoteBuild = true;
+          # remoteBuild = true;
         };
 
         checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
