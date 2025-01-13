@@ -1,4 +1,4 @@
-{config, ...}: {
+{config, pkgs, ...}: {
   imports = [
     ./sops.nix
   ];
@@ -19,6 +19,7 @@
         # vii@nikbook
         ''ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7zhSffzoHpHVr8/TDJnhzvzDAWkS8GZO9udQaJ+ftl''
       ];
+      shell = pkgs.fish;
     };
 
     nikolai = {
@@ -28,6 +29,10 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7zhSffzoHpHVr8/TDJnhzvzDAWkS8GZO9udQaJ+ftl vii@nikbook"
       ];
       extraGroups = ["wheel"];
+      createHome = true;
+      description = "Nikolai";
+      home = "/home/nikolai";
+      shell = pkgs.fish;
     };
   };
 }

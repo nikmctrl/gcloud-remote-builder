@@ -11,12 +11,12 @@
     neededForUsers = true;
   };
 
-  sops.secrets."rootPassword/eversince" = {
+  sops.secrets."eversince/rootPassword" = {
     neededForUsers = true;
     sopsFile = ../../secrets/eversince/general.yaml;
   };
 
-  sops.secrets."rootPassword/icedancer" = {
+  sops.secrets."icedancer/rootPassword" = {
     neededForUsers = true;
     sopsFile = ../../secrets/icedancer/general.yaml;
   };
