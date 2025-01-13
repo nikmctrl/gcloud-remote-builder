@@ -49,6 +49,8 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPD0z5V2708BSOmkhL4s6hbDYLvQjycng3J/nTZQfOhs root@mc-remote-build"
       ];
 
+      isSystemUser = true;
+
       extraGroups = ["wheel" "builder"];
       createHome = true;
       description = "Builder";
