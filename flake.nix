@@ -20,7 +20,7 @@
     deploy-rs.url = "github:serokell/deploy-rs";
 
     # omnix
-    omnix.url = "github:nix-community/omnix";
+    omnix.url = "github:juspay/omnix";
     omnix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
