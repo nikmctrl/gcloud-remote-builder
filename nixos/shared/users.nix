@@ -56,5 +56,7 @@
       # shell = pkgs.fish;
     };
   };
+
+  users.groups.builder = {};
 }
 
