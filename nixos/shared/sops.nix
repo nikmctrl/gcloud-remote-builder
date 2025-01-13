@@ -15,5 +15,5 @@
     neededForUsers = true;
   };
 
-  config.sops.secrets."github-runners/nix-gh-ci" = {};
+  sops.secrets."github-runners/nix-gh-ci" = {};
 }
