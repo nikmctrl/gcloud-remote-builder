@@ -9,18 +9,14 @@
   ...
 }: {
   imports = [
-    # If you want to use modules from other flakes (such as nixos-hardware):
-    # inputs.hardware.nixosModules.common-cpu-amd
-    # inputs.hardware.nixosModules.common-ssd
-
-    # You can also split up your configuration and import pieces of it here:
-    # ./users.nix
-
     ./hardware-configuration.nix
     ../hm.nix
 
     ../shared
   ];
+
+
+  users.users.root.hashedPasswordFile = config.sops.secrets."eversince/rootPassword".path;
 
   boot.tmp.cleanOnBoot = true;
   zramSwap.enable = true;
