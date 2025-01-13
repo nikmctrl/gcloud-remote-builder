@@ -62,7 +62,7 @@
 
         # Available through 'nixos-rebuild --flake .#icedancer'
         icedancer = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
+          system = "aarch64-linux";
           specialArgs = {inherit inputs outputs;};
           modules = [
             ./nixos/icedancer/configuration.nix
@@ -93,7 +93,7 @@
               path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.icedancer;
             };
           };
-          # remoteBuild = true;
+          remoteBuild = true;
         };
 
         checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
