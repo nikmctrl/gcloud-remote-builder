@@ -1,7 +1,7 @@
 keys:
   - &admin_nikolai age1hph9r83xj7cjh8ydpvl9nstyk35cfe7703jf7z0waj9nzgjz3s3qa39n02
   - &server_eversince age1hna5dnsf2xcafg2cu7tlfdzstl6fmuy7efg6lh9ne50k0rn3gdvqfkxx79
-  - &server_icedancer age1pv47vymzwlx78m9xh7yksdafz3ta6cmwtjmpy24ak42nwa9spatsuzw745
+  - &server_icedancer age1ch6kqkllr50j2kff06rwdd5axrevsa9kwc8s8455fustwjf3duqsj83s55
 creation_rules:
   - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
     key_groups:
