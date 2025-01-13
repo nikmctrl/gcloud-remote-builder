@@ -50,7 +50,7 @@
       ];
 
       isSystemUser = true;
-
+      group = "builder";
       extraGroups = ["wheel" "builder"];
       createHome = true;
       description = "Builder";
