@@ -13,7 +13,6 @@
       name = "icedancer";
       tokenFile = config.sops.secrets."github-runners/nix-gh-ci".path;
       url = "https://github.com/nikmctrl/nix-gh-ci";
-      workDir = "/var/lib/github-runners";
       extraLabels = [
         "icedancer"
         "8GB RAM"
@@ -23,8 +22,9 @@
   };
 
   boot.tmp.cleanOnBoot = true;
-  zramSwap.enable = true;
+  # zramSwap.enable = true;
   networking.hostName = "mc-remote-build";
-  # networking.domain = "";
+  networking.domain = "";
   system.stateVersion = "23.11";
+  nixpkgs.hostPlatform = "aarch64-linux";
 }
