@@ -30,22 +30,29 @@
     ...
   } @ inputs: let
     inherit (self) outputs;
-
-    
   in
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
       deployPkgs = import nixpkgs {
-      inherit system;
-      overlays = [
-        deploy-rs.overlay # or deploy-rs.overlays.default
-        (self: super: { deploy-rs = { inherit (pkgs) deploy-rs; lib = super.deploy-rs.lib; }; })
-      ];
-    };
+        inherit system;
+        overlays = [
+          deploy-rs.overlay # or deploy-rs.overlays.default
+          (self: super: {
+            deploy-rs = {
+              inherit (pkgs) deploy-rs;
+              lib = super.deploy-rs.lib;
+            };
+          })
+        ];
+      };
     in {
       devShells.default = import ./shell.nix {inherit pkgs;};
 
       formatter = pkgs.alejandra;
+
+      checks = deployPkgs.deploy-rs.lib.deployChecks self.deploy;
+
+      
     })
     // {
       # Available through 'nixos-rebuild --flake .#eversince'
@@ -58,7 +65,6 @@
             sops-nix.nixosModules.sops
           ];
         };
-
 
         # Available through 'nixos-rebuild --flake .#icedancer'
         icedancer = nixpkgs.lib.nixosSystem {
@@ -93,11 +99,8 @@
               path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.icedancer;
             };
           };
-          # remoteBuild = true;
+          remoteBuild = true;
         };
-
       };
-        checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
-
     };
 }
