@@ -39,26 +39,47 @@
       formatter = pkgs.alejandra;
     })
     // {
-      # Available through 'nixos-rebuild --flake .#instance-20250106-172607'
+      # Available through 'nixos-rebuild --flake .#eversince'
       nixosConfigurations = {
-        instance-20250106-172607 = nixpkgs.lib.nixosSystem {
+        eversince = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = {inherit inputs outputs;};
           modules = [
-            ./nixos/configuration.nix
+            ./nixos/eversince/configuration.nix
+            sops-nix.nixosModules.sops
+          ];
+        };
+
+        icedancer = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {inherit inputs outputs;};
+          modules = [
+            ./nixos/icedancer/configuration.nix
             sops-nix.nixosModules.sops
           ];
         };
       };
 
       deploy.nodes = {
-        instance-20250106-172607 = {
-          hostname = "34.142.105.10";
+        eversince = {
+          hostname = "eversince.viiol.xyz";
           profiles = {
             system = {
               sshUser = "root";
               user = "root";
-              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.instance-20250106-172607;
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.eversince;
+            };
+          };
+          remoteBuild = true;
+        };
+
+        icedancer = {
+          hostname = "188.245.243.221";
+          profiles = {
+            system = {
+              sshUser = "root";
+              user = "root";
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.icedancer;
             };
           };
           remoteBuild = true;
