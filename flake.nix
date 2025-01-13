@@ -18,6 +18,10 @@
 
     # deploy-rs
     deploy-rs.url = "github:serokell/deploy-rs";
+
+    # omnix
+    omnix.url = "github:nix-community/omnix";
+    omnix.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -100,6 +104,7 @@
             };
           };
           remoteBuild = true;
+          fastConnection = true;
         };
       };
     };

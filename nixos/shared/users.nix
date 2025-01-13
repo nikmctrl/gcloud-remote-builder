@@ -41,5 +41,20 @@
       home = "/home/nikolai";
       shell = pkgs.fish;
     };
+
+    builder = {
+      openssh.authorizedKeys.keys = [
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH7zhSffzoHpHVr8/TDJnhzvzDAWkS8GZO9udQaJ+ftl vii@nikbook"
+
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIPD0z5V2708BSOmkhL4s6hbDYLvQjycng3J/nTZQfOhs root@mc-remote-build"
+      ];
+
+      extraGroups = ["wheel"];
+      createHome = true;
+      description = "Builder";
+      home = "/home/.builder";
+      # shell = pkgs.fish;
+    };
   };
 }
+

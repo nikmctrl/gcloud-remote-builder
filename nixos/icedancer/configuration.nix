@@ -1,4 +1,4 @@
-{config, ...}: {
+{config, pkgs, inputs, ...}: {
   imports = [
     ./hardware-configuration.nix
     ./networking.nix # generated at runtime by nixos-infect
@@ -17,6 +17,12 @@
         "icedancer"
         "8GB RAM"
         "4 CPU"
+      ];
+      user = "builder";
+      replace = true;
+      extraPackages = [
+        pkgs.cachix
+        inputs.omnix.packages.aarch64-linux.default
       ];
     };
   };
