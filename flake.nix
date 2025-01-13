@@ -30,38 +30,70 @@
     ...
   } @ inputs: let
     inherit (self) outputs;
+
+    
   in
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = nixpkgs.legacyPackages.${system};
+      deployPkgs = import nixpkgs {
+      inherit system;
+      overlays = [
+        deploy-rs.overlay # or deploy-rs.overlays.default
+        (self: super: { deploy-rs = { inherit (pkgs) deploy-rs; lib = super.deploy-rs.lib; }; })
+      ];
+    };
     in {
       devShells.default = import ./shell.nix {inherit pkgs;};
 
       formatter = pkgs.alejandra;
     })
     // {
-      # Available through 'nixos-rebuild --flake .#instance-20250106-172607'
+      # Available through 'nixos-rebuild --flake .#eversince'
       nixosConfigurations = {
-        instance-20250106-172607 = nixpkgs.lib.nixosSystem {
+        eversince = nixpkgs.lib.nixosSystem {
           system = "x86_64-linux";
           specialArgs = {inherit inputs outputs;};
           modules = [
-            ./nixos/configuration.nix
+            ./nixos/eversince/configuration.nix
+            sops-nix.nixosModules.sops
+          ];
+        };
+
+
+        # Available through 'nixos-rebuild --flake .#icedancer'
+        icedancer = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {inherit inputs outputs;};
+          modules = [
+            ./nixos/icedancer/configuration.nix
             sops-nix.nixosModules.sops
           ];
         };
       };
 
       deploy.nodes = {
-        instance-20250106-172607 = {
+        eversince = {
           hostname = "34.142.105.10";
           profiles = {
             system = {
               sshUser = "root";
               user = "root";
-              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.instance-20250106-172607;
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.eversince;
             };
           };
           remoteBuild = true;
+        };
+
+        icedancer = {
+          hostname = "188.245.243.221";
+          profiles = {
+            system = {
+              sshUser = "root";
+              user = "root";
+              path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.icedancer;
+            };
+          };
+          # remoteBuild = true;
         };
 
         checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
