@@ -19,6 +19,7 @@
         "4 CPU"
       ];
       user = "builder";
+      group = {};
       replace = true;
       extraPackages = [
         pkgs.cachix
