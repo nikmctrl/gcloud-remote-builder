@@ -14,4 +14,6 @@
   sops.secrets."passwords/root" = {
     neededForUsers = true;
   };
+
+  config.sops.secrets."github-runners/nix-gh-ci" = {};
 }
