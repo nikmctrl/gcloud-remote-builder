@@ -8,6 +8,7 @@ creation_rules:
       - age:
           - *admin_nikolai
           - *server_eversince
+          - *server_icedancer
   - path_regex: secrets/eversince/[^/]+\.(yaml|json|env|ini)$
     key_groups:
       - age:
