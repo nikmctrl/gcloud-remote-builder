@@ -11,7 +11,7 @@
     nix-gh-ci = {
       enable = true;
       name = "icedancer";
-      token = config.sops.secrets."github-runners/nix-gh-ci".path;
+      tokenFile = config.sops.secrets."github-runners/nix-gh-ci".path;
       url = "https://github.com/nikmctrl/nix-gh-ci";
       workDir = "/var/lib/github-runners";
       extraLabels = [
